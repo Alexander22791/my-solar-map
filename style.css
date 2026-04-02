@@ -1,0 +1,23 @@
+#map {
+    height: 100%;
+    width: 100%;
+    background-color: #f0f0f0;
+}
+
+/* Stile custom per il popup di Leaflet */
+.leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    padding: 5px;
+    font-family: 'Inter', sans-serif;
+}
+
+.leaflet-popup-tip {
+    background: white;
+}
+
+/* Fix per sidebar su schermi piccoli */
+@media (max-width: 768px) {
+    aside {
+        display: none; /* Semplifichiamo per ora */
+    }
+}

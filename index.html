@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html class="light" lang="it">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Solar Authority | Map Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="overflow-hidden">
+    <header class="fixed top-0 w-full z-50 flex items-center justify-between px-8 h-16 bg-[#041627]/90 backdrop-blur-md shadow-lg text-white">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-orange-400 rounded-lg flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary text-xl">wb_sunny</span>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tighter">Solar Authority</h1>
+        </div>
+    </header>
+
+    <div class="flex h-screen pt-16">
+        <aside class="h-full w-80 flex flex-col bg-[#f2f4f5] z-40 relative shadow-xl border-r border-slate-200">
+            <div class="flex flex-col py-6 gap-2">
+                <div class="px-6 mb-4">
+                    <h2 class="text-lg font-bold text-[#041627]">Project Alpha</h2>
+                    <p class="text-xs text-slate-500 uppercase tracking-widest">Analysis Engine</p>
+                </div>
+            </div>
+
+            <div class="flex-1 px-6 overflow-y-auto custom-scrollbar">
+                <div class="space-y-5">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xs font-bold text-primary opacity-60 uppercase">Current Region</h3>
+                        <span id="city-name" class="px-2 py-1 bg-orange-100 text-orange-700 text-[10px] font-bold rounded tracking-wider">SELECT CITY</span>
+                    </div>
+                    
+                    <div class="p-4 bg-white rounded-xl shadow-sm border-l-4 border-orange-400 space-y-4">
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Daily Target (Net)</p>
+                            <select id="target-kwh" class="w-full p-2 text-sm font-bold bg-slate-50 border-none rounded-lg focus:ring-2 focus:ring-orange-400 outline-none">
+                                <option value="3">3 kWh</option>
+                                <option value="5">5 kWh</option>
+                                <option value="10">10 kWh</option>
+                                <option value="15">15 kWh</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Dimensionamento per:</p>
+                            <select id="calc-strategy" class="w-full p-2 text-xs font-medium bg-slate-100 border-none rounded-lg focus:ring-2 focus:ring-blue-400 outline-none">
+                                <option value="annual">Media Annuale (Standard)</option>
+                                <option value="winter">Copertura Dicembre (Invernale)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-xl shadow-sm border-l-4 border-blue-400">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Local Irradiance</p>
+                        <div class="flex items-baseline gap-1">
+                            <span id="irradiance-val" class="text-2xl font-bold text-primary">--</span>
+                            <span class="text-xs text-slate-500">kWh/m²</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="p-4 bg-white rounded-xl shadow-sm">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Peak Power</p>
+                            <span id="peak-power-val" class="text-lg font-bold text-primary">--</span>
+                            <span class="text-[10px] text-slate-500 ml-1">kWp</span>
+                        </div>
+                        <div class="p-4 bg-white rounded-xl shadow-sm">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Panels</p>
+                            <span id="panels-count" class="text-lg font-bold text-primary">--</span>
+                            <span class="text-[10px] text-slate-500 ml-1">Units</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-[#041627] rounded-xl shadow-lg text-white">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-3">Seasonal Variation</p>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs items-center">
+                                <span class="opacity-70">Giugno (Max)</span>
+                                <span id="june-val" class="font-bold text-orange-400 text-sm">--</span>
+                            </div>
+                            <div class="flex justify-between text-xs items-center mt-2">
+                                <span class="opacity-70">Dicembre (Min)</span>
+                                <span id="dec-val" class="font-bold text-blue-400 text-sm">--</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-xl shadow-sm border border-slate-200">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Consiglio Tecnico</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-slate-600">Inclinazione (Tilt):</span>
+                            <span id="tilt-val" class="text-sm font-bold text-primary">--°</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <h3 class="text-[10px] font-bold text-slate-400 uppercase mb-2">Recent History</h3>
+                        <div id="history-list" class="flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 mt-auto border-t border-slate-200 space-y-4 bg-white/50">
+                <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-2">Cerca Località</p>
+                    <div class="flex gap-2">
+                        <input type="text" id="city-input" placeholder="Es. Cagliari, Roma..." 
+                            class="flex-1 p-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-400 outline-none">
+                        <button id="calc-btn" class="p-2 bg-[#041627] text-white rounded-lg hover:bg-slate-800 transition-all">
+                            <span class="material-symbols-outlined">search</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button id="download-report" class="w-full py-2 border-2 border-[#041627] text-[#041627] rounded-lg font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#041627] hover:text-white transition-all">
+                    <span class="material-symbols-outlined text-sm">download</span>
+                    Download Report (.txt)
+                </button>
+            </div>
+        </aside> ```
+
+        <main class="flex-1 relative">
+            <div id="map" class="absolute inset-0 w-full h-full z-10"></div>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

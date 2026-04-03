@@ -1,23 +1,44 @@
+/* Reset di base */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 #map {
     height: 100%;
     width: 100%;
     background-color: #f0f0f0;
+    z-index: 10;
 }
 
-/* Stile custom per il popup di Leaflet */
-.leaflet-popup-content-wrapper {
-    border-radius: 12px;
-    padding: 5px;
-    font-family: 'Inter', sans-serif;
-}
-
-.leaflet-popup-tip {
-    background: white;
-}
-
-/* Fix per sidebar su schermi piccoli */
-@media (max-width: 768px) {
-    aside {
-        display: none; /* Semplifichiamo per ora */
+/* Gestione Responsive */
+@media (max-width: 1024px) {
+    /* Su Tablet e Mobile, la sidebar si sposta sopra o diventa un overlay */
+    .flex.h-screen {
+        flex-direction: column;
+        overflow-y: auto;
     }
+
+    aside {
+        width: 100% !important;
+        height: auto !important;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid #cbd5e1;
+    }
+
+    main {
+        height: 400px; /* Altezza fissa per la mappa su mobile */
+        flex: none;
+    }
+    
+    .fixed.top-0 {
+        position: sticky;
+    }
+}
+
+/* Ottimizzazione scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
 }

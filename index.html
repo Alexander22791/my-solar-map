@@ -7,8 +7,8 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" />
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body class="overflow-x-hidden overflow-y-auto">
     <header class="fixed top-0 w-full z-50 flex items-center justify-between px-8 h-16 bg-[#041627]/90 backdrop-blur-md shadow-lg text-white">
@@ -116,6 +116,7 @@
                             <span class="material-symbols-outlined">search</span>
                         </button>
                     </div>
+                    <p id="status-message" hidden role="alert" aria-live="assertive"></p>
                 </div>
 
                 <button id="download-report" class="w-full py-2 border-2 border-[#041627] text-[#041627] rounded-lg font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#041627] hover:text-white transition-all">
@@ -123,14 +124,15 @@
                     Download Report (.txt)
                 </button>
             </div>
-        </aside> ```
+        </aside>
 
         <main class="flex-1 relative">
             <div id="map" class="absolute inset-0 w-full h-full z-10"></div>
+            <div id="map-message" hidden role="status" aria-live="polite"></div>
         </main>
     </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="script.js"></script>
+    <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+    <script src="./script.js"></script>
 </body>
 </html>
